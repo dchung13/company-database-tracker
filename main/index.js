@@ -59,7 +59,7 @@ const menuList = () => {
                     addDepartment();
                     break;
                 case 'Quit': 
-
+                    db.end();
             }
         })
 }
@@ -86,11 +86,11 @@ const addEmployee = () => {
                 {
                     name: 'newEmployeeManager',
                     type: 'input',
-                    message: 'Who is the manager of the new employee?'
+                    message: 'What is the manager id of the new employee?'
                 },
             ])
             .then((answer) => {
-                db.query(`INSERT answer.newEmployeeFirstName, answer.newEmployeeLastName, answer.newEmployeeRole, answer.newEmployeeManager INTO employees.first_name, employees.last_name, employees.role_id, employees.manager`, (err, results) => {
+                db.query(`INSERT INTO employees(first_name, last_name, role_id, manager_id) VALUES ('${answer.newEmployeeFirstName}', '${answer.newEmployeeLastName}', ${answer.newEmployeeRole}, ${answer.newEmployeeManager})`, (err, results) => {
                     if(err) {
                         console.error(err)
                     }
@@ -124,7 +124,7 @@ const addRole = () => {
                     }
                 ])
                 .then((answer) => {
-                    db.query(`INSERT answer.newRoleName, answer.newRoleSalary, answer.newRoleDepartment INTO roles.title, roles.salary, roles.department_id`, (err, results) => {
+                    db.query(`INSERT INTO roles(title, salary, department_id) VALUES ('${answer.newRoleName}', ${answer.newRoleSalary}, ${answer.newRoleDepartment})`, (err, results) => {
                         if (err) {
                             console.error(err)
                         }
@@ -147,7 +147,7 @@ const addDepartment = () => {
                     }
                 ])
                 .then((answer) => {
-                    db.query(`INSERT answer.newDepartmentName INTO department.name`, (err, results) => {
+                    db.query(`INSERT INTO department(name) VALUES ('${answer.newDepartmentName}')`, (err, results) => {
                         if (err) {
                             console.error(err)
                         }

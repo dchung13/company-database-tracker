@@ -13,10 +13,10 @@ VALUES ('HR Rep', 110000, 1),
     ('Cubicle Rep', 130000, 4),
     ('Customer Support Rep', 71000, 5);
 
-INSERT INTO employees (first_name, last_name, role_id)
-VALUES ('Bryan', 'Nguyen', 1),
-    ('Jonathan', 'Borroel', 2),
-    ('Evan', 'Schindler', 3),
-    ('David', 'Vo', 4),
-    ('Jedd', 'Lin', 5),
-    ('Scarlett', 'Borroel', 2);
+INSERT INTO employees (first_name, last_name, role_id, manager_id)
+VALUES ('Bryan', 'Nguyen', 1, null),
+    ('Jonathan', 'Borroel', 2, 1),
+    ('Evan', 'Schindler', 3, null),
+    ('David', 'Vo', 4, 3),
+    ('Jedd', 'Lin', 5, 3),
+    ('Scarlett', 'Borroel', 2, 1);
