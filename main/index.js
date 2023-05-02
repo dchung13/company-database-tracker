@@ -1,15 +1,7 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
-const express = require('express');
 // Import and require mysql2
 const mysql = require('mysql2');
-
-const PORT = process.env.PORT || 3001;
-const app = express();
-
-// Express middleware
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
 
 // Connect to database
 const db = mysql.createConnection(
@@ -18,19 +10,11 @@ const db = mysql.createConnection(
     // MySQL username,
     user: 'root',
     // MySQL password
-    password: 'Bandersnatch',
+    password: 'password',
     database: 'company_db'
   },
   console.log(`Connected to the company_db database.`)
 );
-
-app.use((req, res) => {
-  res.status(404).end();
-});
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
 
 const menuList = () => {
     inquirer
@@ -46,7 +30,8 @@ const menuList = () => {
             switch(answer.viewList) {
                 case 'View All Employees': 
                     db.query(`SELECT * FROM employees`, (err, results) => {
-                        err ? console.error(err) : console.table(results)
+                        err ? console.error(err) : console.table(results);
+                        menuList();
                     });
                     break;
                 case 'Add Employee': 
@@ -58,6 +43,7 @@ const menuList = () => {
                 case 'View All Roles': 
                     db.query(`SELECT * FROM roles`, (err, results) => {
                         err ? console.error(err) : console.table(results);
+                        menuList();
                     });
                     break;
                 case 'Add Role': 
@@ -66,6 +52,7 @@ const menuList = () => {
                 case 'View All Departments': 
                     db.query(`SELECT * FROM department`, (err, results) => {
                         err ? console.error(err) : console.table(results);
+                        menuList();
                     });
                     break;
                 case 'Add Department': 
@@ -108,10 +95,12 @@ const addEmployee = () => {
                         console.error(err)
                     }
                     else {
-                        console.log('Employee added!')
+                        console.log('Employee added!');
                     }
+                    menuList();
                 })
             })
+
         }
 
 const addRole = () => {
@@ -142,6 +131,7 @@ const addRole = () => {
                         else {
                             console.log('Role added!')
                         }
+                        menuList();
                     })
                 })
 }
@@ -164,8 +154,10 @@ const addDepartment = () => {
                         else {
                             console.log('Department added successfully');
                         }
+                        menuList();
                     })
                 })
+
             }
 
 const updateEmployee = () => {
@@ -195,9 +187,12 @@ const updateEmployee = () => {
                 ])
                 .then((answer) => {
                     db.query(`UPDATE employees SET role_id = ${answer.updateRole} WHERE employees.id = ${answer.selectingEmployeeID}`, (err, results) => {
-                        err ? console.error(err) : console.log('Role updated!')
+                        err ? console.error(err) : console.log('Role updated!');
+                        menuList();
                     })
                 })
         }
     })
 }
+
+menuList();
